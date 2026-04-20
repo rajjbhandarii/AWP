@@ -1,50 +1,50 @@
-var app = angular.module('personalManagerApp', []);
+var app = angular.module("personalManagerApp", []);
 
-app.controller('TaskController', function ($scope) {
-  $scope.priorityFilter = '';
-  $scope.sortField = 'dueDate';
-  $scope.message = '';
+app.controller("TaskController", function ($scope) {
+  $scope.priorityFilter = "";
+  $scope.sortField = "dueDate";
+  $scope.message = "";
 
   $scope.tasks = [
     {
-      title: 'Prepare AngularJS practical notes',
-      category: 'College',
+      title: "Prepare AngularJS practical notes",
+      category: "College",
       dueDate: new Date(),
-      priority: 'High',
+      priority: "High",
       priorityRank: 1,
-      completed: false
+      completed: false,
     },
     {
-      title: 'Upload assignment screenshots',
-      category: 'Project',
+      title: "Upload assignment screenshots",
+      category: "Project",
       dueDate: new Date(new Date().setDate(new Date().getDate() + 2)),
-      priority: 'Medium',
+      priority: "Medium",
       priorityRank: 2,
-      completed: false
+      completed: false,
     },
     {
-      title: 'Review lab experiment output',
-      category: 'Lab Work',
+      title: "Review lab experiment output",
+      category: "Lab Work",
       dueDate: new Date(new Date().setDate(new Date().getDate() + 5)),
-      priority: 'Low',
+      priority: "Low",
       priorityRank: 3,
-      completed: true
-    }
+      completed: true,
+    },
   ];
 
   $scope.newTask = {
-    title: '',
-    category: '',
+    title: "",
+    category: "",
     dueDate: null,
-    priority: ''
+    priority: "",
   };
 
   function getPriorityRank(priority) {
-    if (priority === 'High') {
+    if (priority === "High") {
       return 1;
     }
 
-    if (priority === 'Medium') {
+    if (priority === "Medium") {
       return 2;
     }
 
@@ -52,8 +52,13 @@ app.controller('TaskController', function ($scope) {
   }
 
   $scope.addTask = function () {
-    if (!$scope.newTask.title || !$scope.newTask.category || !$scope.newTask.dueDate || !$scope.newTask.priority) {
-      $scope.message = 'Please fill all task details.';
+    if (
+      !$scope.newTask.title ||
+      !$scope.newTask.category ||
+      !$scope.newTask.dueDate ||
+      !$scope.newTask.priority
+    ) {
+      $scope.message = "Please fill all task details.";
       return;
     }
 
@@ -63,19 +68,19 @@ app.controller('TaskController', function ($scope) {
       dueDate: $scope.newTask.dueDate,
       priority: $scope.newTask.priority,
       priorityRank: getPriorityRank($scope.newTask.priority),
-      completed: false
+      completed: false,
     });
 
     $scope.newTask = {
-      title: '',
-      category: '',
+      title: "",
+      category: "",
       dueDate: null,
-      priority: ''
+      priority: "",
     };
 
     $scope.taskForm.$setPristine();
     $scope.taskForm.$setUntouched();
-    $scope.message = 'Task added successfully.';
+    $scope.message = "Task added successfully.";
   };
 
   $scope.deleteTask = function (taskToDelete) {
@@ -83,7 +88,7 @@ app.controller('TaskController', function ($scope) {
 
     if (index !== -1) {
       $scope.tasks.splice(index, 1);
-      $scope.message = 'Task deleted.';
+      $scope.message = "Task deleted.";
     }
   };
 
@@ -91,7 +96,7 @@ app.controller('TaskController', function ($scope) {
     $scope.tasks = $scope.tasks.filter(function (task) {
       return !task.completed;
     });
-    $scope.message = 'Completed tasks cleared.';
+    $scope.message = "Completed tasks cleared.";
   };
 
   $scope.filterByPriority = function (task) {

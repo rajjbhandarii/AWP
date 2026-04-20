@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" ng-app="personalManagerApp">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,6 +9,7 @@
   <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
   <script src="app.js" defer></script>
 </head>
+
 <body ng-controller="TaskController">
   <main class="app-shell">
     <section class="intro">
@@ -76,7 +78,7 @@
 
         <div class="task-list">
           <article class="task-card"
-                   ng-repeat="task in filteredTasks = (tasks | filter:searchText | filter:filterByPriority | orderBy:sortField)">
+            ng-repeat="task in filteredTasks = (tasks | filter:searchText | filter:filterByPriority | orderBy:sortField)">
             <div>
               <p class="task-category">{{ task.category }}</p>
               <h3 ng-class="{done: task.completed}">{{ task.title }}</h3>
@@ -98,4 +100,5 @@
     </section>
   </main>
 </body>
+
 </html>
