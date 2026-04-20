@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="personalManagerApp">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Personal Task Manager</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+  <script src="app.js" defer></script>
+</head>
+<body ng-controller="TaskController">
+  <main class="app-shell">
+    <section class="intro">
+      <div>
+        <p class="eyebrow">Advanced Web Programming</p>
+        <h1>My Personal Task Manager</h1>
+        <p class="lead">Plan class work, lab tasks, submissions, and personal goals in one simple dashboard.</p>
+      </div>
+      <img class="intro-image" src="assets/task-manager.svg" alt="Student planning tasks on a desk">
+    </section>
+
+    <section class="manager-grid">
+      <form class="task-form" name="taskForm" ng-submit="addTask()" novalidate>
+        <h2>Add New Task</h2>
+
+        <label for="title">Task Title</label>
+        <input id="title" type="text" ng-model="newTask.title" placeholder="Example: Submit AWP assignment" required>
+
+        <label for="category">Category</label>
+        <select id="category" ng-model="newTask.category" required>
+          <option value="" disabled selected>Select category</option>
+          <option>College</option>
+          <option>Lab Work</option>
+          <option>Project</option>
+          <option>Personal</option>
+        </select>
+
+        <label for="dueDate">Due Date</label>
+        <input id="dueDate" type="date" ng-model="newTask.dueDate" required>
+
+        <label for="priority">Priority</label>
+        <select id="priority" ng-model="newTask.priority" required>
+          <option value="" disabled selected>Select priority</option>
+          <option>High</option>
+          <option>Medium</option>
+          <option>Low</option>
+        </select>
+
+        <button type="submit">Add Task</button>
+        <p class="form-message" ng-if="message">{{ message }}</p>
+      </form>
+
+      <section class="task-panel">
+        <div class="panel-header">
+          <div>
+            <h2>Task List</h2>
+            <p>{{ filteredTasks.length }} task{{ filteredTasks.length === 1 ? '' : 's' }} found</p>
+          </div>
+          <button class="clear-btn" type="button" ng-click="clearCompleted()">Clear Completed</button>
+        </div>
+
+        <div class="controls">
+          <input type="search" ng-model="searchText" placeholder="Search task or category">
+          <select ng-model="priorityFilter">
+            <option value="">All priorities</option>
+            <option>High</option>
+            <option>Medium</option>
+            <option>Low</option>
+          </select>
+          <select ng-model="sortField">
+            <option value="dueDate">Sort by due date</option>
+            <option value="priorityRank">Sort by priority</option>
+            <option value="title">Sort by title</option>
+          </select>
+        </div>
+
+        <div class="task-list">
+          <article class="task-card"
+                   ng-repeat="task in filteredTasks = (tasks | filter:searchText | filter:filterByPriority | orderBy:sortField)">
+            <div>
+              <p class="task-category">{{ task.category }}</p>
+              <h3 ng-class="{done: task.completed}">{{ task.title }}</h3>
+              <p class="task-date">Due: {{ task.dueDate | date:'dd MMM yyyy' }}</p>
+            </div>
+            <div class="task-actions">
+              <span class="priority" ng-class="task.priority.toLowerCase()">{{ task.priority }}</span>
+              <label class="complete-toggle">
+                <input type="checkbox" ng-model="task.completed">
+                Done
+              </label>
+              <button type="button" ng-click="deleteTask(task)">Delete</button>
+            </div>
+          </article>
+        </div>
+
+        <p class="empty-state" ng-if="filteredTasks.length === 0">No matching tasks yet. Add one from the form.</p>
+      </section>
+    </section>
+  </main>
+</body>
+</html>
