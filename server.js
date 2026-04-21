@@ -20,7 +20,9 @@ const contentTypes = {
 const server = http.createServer((req, res) => {
   const requestedUrl = req.url === "/" ? "/app.html" : req.url;
   const filePath = path.join(ROOT, requestedUrl);
-
+  console.log(
+    `Root: ${ROOT}, Requested URL: ${requestedUrl}, Resolved File Path: ${filePath}`,
+  );
   fs.readFile(filePath, (error, content) => {
     // Find /app.html file
     // Send it to browser
