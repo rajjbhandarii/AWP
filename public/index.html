@@ -58,7 +58,7 @@
             <h2>Task List</h2>
             <p>{{ filteredTasks.length }} task{{ filteredTasks.length === 1 ? '' : 's' }} found</p>
           </div>
-          <button class="clear-btn" type="button" ng-click="clearCompleted()">Clear Completed</button>
+          <button class="clear-btn" type="button" ng-click="clearCompleted($index)">Clear Completed</button>
         </div>
 
         <div class="controls">
@@ -90,7 +90,7 @@
                 <input type="checkbox" ng-model="task.completed">
                 Done
               </label>
-              <button type="button" ng-click="deleteTask(task)">Delete</button>
+              <button type="button" ng-click="deleteTask($index)">Delete</button>
             </div>
           </article>
         </div>

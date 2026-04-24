@@ -1,47 +1,44 @@
-const http = require("http");
-const fs = require("fs");
-const path = require("path");
+const express = require("express");
+const bodyParser = require("body-parser");
+
+const app = express();
+app.use(express.json());
+app.use(express.static("public"));
+app.use(bodyParser.json());
 
 const PORT = 3000;
-const ROOT = __dirname;
 
-const contentTypes = {
-  ".html": "text/html; charset=utf-8",
-  ".css": "text/css; charset=utf-8",
-  ".js": "application/javascript; charset=utf-8",
-  ".json": "application/json; charset=utf-8",
-  ".png": "image/png",
-  ".jpg": "image/jpeg",
-  ".jpeg": "image/jpeg",
-  ".svg": "image/svg+xml; charset=utf-8",
-  ".ico": "image/x-icon",
-};
+let tasks = [];
 
-const server = http.createServer((req, res) => {
-  const requestedUrl = req.url === "/" ? "/app.html" : req.url;
-  const filePath = path.join(ROOT, requestedUrl);
-  console.log(
-    `Root: ${ROOT}, Requested URL: ${requestedUrl}, Resolved File Path: ${filePath}`,
-  );
-  fs.readFile(filePath, (error, content) => {
-    // Find /app.html file
-    // Send it to browser
-
-    if (error) {
-      res.writeHead(404, { "Content-Type": "text/html; charset=utf-8" });
-      res.end("<h1>404 - File Not Found</h1>");
-      return;
-    }
-
-    // Determine content type based on file extension
-    const ext = path.extname(filePath).toLowerCase();
-    res.writeHead(200, {
-      "Content-Type": contentTypes[ext] || "application/octet-stream",
-    });
-    res.end(content);
+app.get("/getTasks", (req, res) => {
+  res.json({
+    tasks: tasks,
   });
 });
 
-server.listen(PORT, () => {
+app.post("/addTasks", (req, res) => {
+  let newTask = req.body;
+  tasks.push(newTask);
+  res.json({
+    message: "Task added successfully.",
+  });
+});
+
+app.delete("/deleteTask", (req, res) => {
+  const index = req.body.index;
+  console.log("Received request to delete task at index:", index);
+  if (Number.isInteger(index) && index >= 0 && index < tasks.length) {
+    tasks.splice(index, 1);
+    res.json({
+      message: "Task deleted successfully.",
+    });
+  } else {
+    res.status(400).json({
+      message: "Invalid task index.",
+    });
+  }
+});
+
+app.listen(PORT, () => {
   console.log(`My Personal Manager App is running at http://localhost:${PORT}`);
 });
